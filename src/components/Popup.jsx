@@ -7,93 +7,78 @@ const Popup = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState('register');
   const navigate = useNavigate();
 
-  // Callback for successful registration
   const handleRegisterSuccess = () => {
     toast.success('Registered successfully');
     setActiveTab('login');
   };
 
-  // Callback for successful login
   const handleLoginSuccess = () => {
     toast.success('Login successful');
     onClose();
-    navigate('/ai'); // Navigate to AI page (adjust the route as needed)
+    navigate('/ai');
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-8 rounded-3xl w-3/4 max-w-4xl relative">
-        {/* Close Button */}
-        <button
-          className="absolute top-4 right-4 text-black text-xl font-bold"
-          onClick={onClose}
-        >
-          X
-        </button>
+      <div className="rounded-3xl w-3/4 max-w-4xl relative flex shadow-2xl shadow-black/50">
+        {/* Left Section (Form and Tabs) - Equal width */}
+        <div className="flex-1 bg-[#131313] rounded-l-3xl p-6 relative">
+          {/* Toggle Buttons */}
+          <div className="flex justify-start mb-4 gap-2">
+            <button
+              className={`px-4 py-2 text-white ${
+                activeTab === 'register' ? 'border-b-2 border-white' : ''
+              }`}
+              onClick={() => setActiveTab('register')}
+            >
+              Register
+            </button>
+            <button
+              className={`px-4 py-2 text-white ${
+                activeTab === 'login' ? 'border-b-2 border-white' : ''
+              }`}
+              onClick={() => setActiveTab('login')}
+            >
+              Login
+            </button>
+          </div>
 
-        {/* Toggle Buttons */}
-        <div className="flex justify-center mb-6 gap-2">
-          <button
-            className={`px-6 py-2 rounded-t-lg ${
-              activeTab === 'register'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-black'
-            }`}
-            onClick={() => setActiveTab('register')}
-          >
-            Register
-          </button>
-          <button
-            className={`px-6 py-2 rounded-t-lg ${
-              activeTab === 'login'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-black'
-            }`}
-            onClick={() => setActiveTab('login')}
-          >
-            Login
-          </button>
-        </div>
-
-        {/* Form and Image Layout */}
-        <div
-          className={`flex ${
-            activeTab === 'register' ? 'flex-row' : 'flex-row-reverse'
-          } h-96`}
-        >
           {/* Form Container */}
-          <div className="flex-1 p-4 overflow-auto">
+          <div className="h-96 overflow-auto">
             {activeTab === 'register' ? (
               <RegisterForm onRegisterSuccess={handleRegisterSuccess} />
             ) : (
               <LoginForm onLoginSuccess={handleLoginSuccess} />
             )}
           </div>
+        </div>
 
-          {/* Vertical Line */}
-          <div className="w-px bg-gray-300"></div>
-
-          {/* Image Container */}
-          <div className="flex-1 p-4">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtnvAOajH9gS4C30cRF7rD_voaTAKly2Ntaw&s"
-              alt="Popup Image"
-              className="w-full h-full object-cover rounded"
-            />
-          </div>
+        {/* Right Section (Solid Color) - Equal width with enhanced text styling */}
+        <div className="flex-1 bg-[#d18b3c] rounded-r-3xl relative flex flex-col items-center justify-center">
+          <button
+            className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-[#131313] text-xl font-bold hover:bg-[#131313] hover:text-[#d18b3c] rounded-full transition-colors duration-300"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            X
+          </button>
+          <h1 className="text-5xl font-extrabold text-[#131313] mb-4 tracking-wider text-shadow-xl bg-clip-text  bg-gradient-to-r from-[#131313] to-[#4a2f0b] hover:scale-110 transition-transform duration-500 font-rajdhani">
+            UNIFIED AI
+          </h1>
+          <p className="text-xl text-[#131313] font-semibold text-center px-6 italic text-shadow-sm hover:scale-105 transition-transform duration-300">
+            Empowering Intelligence, Unifying Solutions
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-// Register Form Component
 const RegisterForm = ({ onRegisterSuccess }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Registration function
   const register = async (username, email, password) => {
     try {
       await axios.post('https://unifiedai.onrender.com/api/v1/user/Register', {
@@ -116,49 +101,49 @@ const RegisterForm = ({ onRegisterSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-black font-medium">Username</label>
+      <div className="my-3">
+        <label className="block text-[#cdced0] font-medium">Username</label>
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 border border-gray-300 rounded bg-[#cdced0] focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div>
-        <label className="block text-black font-medium">Email</label>
+      <div className="my-3">
+        <label className="block text-[#cdced0] font-medium">Email</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 border border-gray-300 rounded bg-[#cdced0] focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div>
-        <label className="block text-black font-medium">Password</label>
+      <div className="my-3">
+        <label className="block text-[#cdced0] font-medium">Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 border border-gray-300 rounded bg-[#cdced0] focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <button
-        type="submit"
-        className="w-full py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded hover:from-purple-600 hover:to-pink-600"
-      >
-        Register
-      </button>
+      <div className="mt-6">
+        <button
+          type="submit"
+          className="w-full py-2 bg-[#d18b3c] text-white rounded hover:bg-[#b37432] transition-colors duration-200"
+        >
+          Register
+        </button>
+      </div>
     </form>
   );
 };
 
-// Login Form Component
 const LoginForm = ({ onLoginSuccess }) => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // Login function
   const login = async (emailOrUsername, password) => {
     try {
       await axios.post('https://unifiedai.onrender.com/api/v1/user/login', {
@@ -180,30 +165,32 @@ const LoginForm = ({ onLoginSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-black font-medium">Email or Username</label>
+      <div className="my-3">
+        <label className="block text-[#cdced0] font-medium">Email or Username</label>
         <input
           type="text"
           value={emailOrUsername}
           onChange={(e) => setEmailOrUsername(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 border border-gray-300 rounded bg-[#cdced0] focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div>
-        <label className="block text-black font-medium">Password</label>
+      <div className="my-3">
+        <label className="block text-[#cdced0] font-medium">Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 border border-gray-300 rounded bg-[#cdced0] focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <button
-        type="submit"
-        className="w-full py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded hover:from-purple-600 hover:to-pink-600"
-      >
-        Login
-      </button>
+      <div className="mt-6">
+        <button
+          type="submit"
+          className="w-full py-2 bg-[#d18b3c] text-white rounded hover:bg-[#b37432] transition-colors duration-200"
+        >
+          Login
+        </button>
+      </div>
     </form>
   );
 };
