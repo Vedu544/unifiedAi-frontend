@@ -1,0 +1,9 @@
+/* Add this to set the font globally */
+body {
+    font-family: 'Rosarivo', serif; /* Use 'serif' as a fallback */
+}
+::-webkit-scrollbar{
+    display: none;
+}
+
+/* ... existing styles ... */
