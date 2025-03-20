@@ -144,12 +144,32 @@ const LoginForm = ({ onLoginSuccess }) => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = async (emailOrUsername, password) => {
+//   const login = async (emailOrUsername, password) => {
+//     try {
+//       await axios.post('https://unifiedai.onrender.com/api/v1/user/login', {
+//         emailOrUsername,
+//         password,
+//       });
+//       toast.success('Login successful');
+//       onLoginSuccess();
+//     } catch (error) {
+//       toast.error('Login failed');
+//       console.error('Login error:', error);
+//     }
+//   };
+
+const login = async (emailOrUsername, password) => {
     try {
-      await axios.post('https://unifiedai.onrender.com/api/v1/user/login', {
+      const response = await axios.post('https://unifiedai.onrender.com/api/v1/user/login', {
         emailOrUsername,
         password,
       });
+  
+      const accessToken = response.data.data.accessToken;
+  
+      // Set the access token in cookies
+      document.cookie = `unifiedAiAccessToken=${accessToken}; path=/; secure; samesite=strict`; // Important: secure and samesite in production
+  
       toast.success('Login successful');
       onLoginSuccess();
     } catch (error) {

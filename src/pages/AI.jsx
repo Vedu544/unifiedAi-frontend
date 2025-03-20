@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 
 const AI = () => {
   // State declarations
@@ -20,9 +20,7 @@ const AI = () => {
 
   const fetchAImodels = async () => {
     try {
-      const response = await axios.get(
-        "https://unifiedai.onrender.com/api/v1/aiModel/get-models"
-      );
+      const response = await axios.get("https://unifiedai.onrender.com/api/v1/aiModel/get-models");
       setModels(response.data.data); // Store models array
       setLoading(false);
     } catch (error) {
@@ -48,19 +46,15 @@ const AI = () => {
 
     // Send prompt and selected models to API
     try {
-      const token = Cookies.get("unifiedAiAccessToken"); // Get the token from cookies
-      const response = await axios.post(
-        "https://unifiedai.onrender.com/api/v1/chat/get-reply-from-ai",
-        {
-          promptText: currentPrompt,
-          selectedTextModels: selectedAPIs, // Send selected model IDs
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the authorization header
-          },
+      const token = Cookies.get('unifiedAiAccessToken'); // Get the token from cookies
+      const response = await axios.post("https://unifiedai.onrender.com/api/v1/chat/get-reply-from-ai", {
+        promptText: currentPrompt,
+        selectedTextModels: selectedAPIs, // Send selected model IDs
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the token in the authorization header
         }
-      );
+      });
 
       // Assuming response.data.data is an array of { modelId, response }
       const aiResponses = response.data.data.promptResponses;
@@ -71,29 +65,20 @@ const AI = () => {
       //   setMessages((prev) => [...prev, { role: "ai", content: `${modelName}: ${res.response}` }]);
       // });
       aiResponses.forEach((res) => {
-        const modelName =
-          getAImodels.find((model) => model.id === res.modelId)?.name ||
-          "Unknown Model";
-        setMessages((prev) => [
-          ...prev,
-          { role: "ai", content: `${modelName}: ${res.responseText}` },
-        ]);
+        const modelName = getAImodels.find((model) => model.id === res.modelId)?.name || "Unknown Model";
+        setMessages((prev) => [...prev, { role: "ai", content: `${modelName}: ${res.responseText}` }]);
       });
     } catch (error) {
       console.log(error);
       setError("Failed to fetch response");
-      setMessages((prev) => [
-        ...prev,
-        { role: "error", content: "Failed to get response from AI" },
-      ]);
+      setMessages((prev) => [...prev, { role: "error", content: "Failed to get response from AI" }]);
     }
   };
 
   // Auto-scroll to the bottom when messages update
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -111,7 +96,7 @@ const AI = () => {
   //     console.log(modelObj);
   //     // Check if model is already selected by id
   //     const exists = prev.some(api => api.id === model.ai_model_id);
-
+      
   //     if (exists) {
   //       // Remove the model if it exists
   //       return prev.filter((api) => api.id !== model.ai_model_id);
@@ -120,13 +105,13 @@ const AI = () => {
   //       return[...prev, modelObj];
   //     }
   //   });
-  // }
+  // }  
 
   const handleCheckboxChange = (model) => {
     setSelectedAPIs((prev) => {
       const modelObj = { id: model.ai_model_id, name: model.name };
-      const exists = prev.some((api) => api.id === modelObj.id);
-
+      const exists = prev.some(api => api.id === modelObj.id);
+      
       if (exists) {
         return prev.filter((api) => api.id !== modelObj.id);
       } else {
@@ -134,6 +119,7 @@ const AI = () => {
       }
     });
   };
+
 
   // Mock past chats data
   const pastChats = [
@@ -180,9 +166,7 @@ const AI = () => {
               <div
                 key={index}
                 className={`mb-2 p-2 rounded-lg ${
-                  msg.role === "user"
-                    ? "bg-blue-500 text-white ml-auto"
-                    : "bg-gray-200 text-black"
+                  msg.role === "user" ? "bg-blue-500 text-white ml-auto" : "bg-gray-200 text-black"
                 }`}
                 style={{ maxWidth: "80%" }}
               >
@@ -257,7 +241,7 @@ const AI = () => {
         ) : (
           // <div className="space-y-4 pt-4">
           //   {getAImodels.map((model) => (
-
+              
           //     <div key={model.id} className="flex items-center">
           //       <input
           //         type="checkbox"
@@ -278,28 +262,26 @@ const AI = () => {
           //   ))}
           // </div>
           <div className="space-y-4 pt-4">
-            {getAImodels.map((model) => (
-              <div key={model.id} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={model.id}
-                  checked={selectedAPIs.some(
-                    (api) => api.id === model.ai_model_id
-                  )} // Updated check
-                  onChange={() => handleCheckboxChange(model)}
-                  className="mr-2"
-                />
-                <img
-                  src={model.logo_secure_url}
-                  alt={model.name}
-                  className="w-6 h-6 mr-2 rounded-full"
-                />
-                <label htmlFor={model.id} className="cursor-pointer">
-                  {model.name}
-                </label>
-              </div>
-            ))}
-          </div>
+  {getAImodels.map((model) => (
+    <div key={model.id} className="flex items-center">
+      <input
+        type="checkbox"
+        id={model.id}
+        checked={selectedAPIs.some(api => api.id === model.ai_model_id)} // Updated check
+        onChange={() => handleCheckboxChange(model)}
+        className="mr-2"
+      />
+      <img
+        src={model.logo_secure_url}
+        alt={model.name}
+        className="w-6 h-6 mr-2 rounded-full"
+      />
+      <label htmlFor={model.id} className="cursor-pointer">
+        {model.name}
+      </label>
+    </div>
+  ))}
+</div>
         )}
       </div>
     </>
